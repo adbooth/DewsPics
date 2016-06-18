@@ -55,7 +55,7 @@ def login():
     error = ''
     if 'message' in session:
         error = session['message']
-        
+
     if request.method == 'POST':
         if request.form['password'] == app.config['PASSWORD']:
             session['loggedIn'] = True
@@ -85,8 +85,8 @@ def upload():
 
         if not error and image and allowed_type(filename):
             filename = secure_filename(filename)
-            index_add(filename, request.form['title'], request.form['blurb'])
             image.save(path.join(app.config['UPLOAD_FOLDER'], filename))
+            index_add(filename, request.form['title'], request.form['blurb'])
             return redirect('/')
 
     return render_template('upload.html', error=error)
