@@ -1,0 +1,22 @@
+
+body {
+  background-color: Snow;
+  /*font-family: "Roboto Condensed", sans-serif;*/
+  font-family: 'Lucida Console', Monaco, monospace;
+}
+
+.container {
+  max-width: 500px;
+}
+
+.navbar {
+  position: fixed;
+  background-color: Snow;
+  width: 100%;
+  max-width: 100%;
+}
+
+.image img {
+  width: 100%;
+  max-width: 100%;
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto+Condensed"/>
+  <link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='css/upload.css')}}"/>
+
+  <title>DewFavs - Upload</title>
+</head>
+<body>
+  <div class="container">
+    <h1>Upload a photo</h1>
+    <form method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="file" id="uploadButton">1. Select your image</label>
+        <input type="file" name="file" id="file" required/>
+      </div>
+      <div class="form-group">
+        <label for="title">2. Title your image</label>
+        <input type="text" name="title" id="title" class="form-control" placeholder='Pick a nice title. How about "My Lovely Son Andrew"?' required/>
+      </div>
+      <div class="form-group">
+        <label for="blurb">3. Write some info about your image</label>
+        <textarea name="blurb" id="blurb" class="form-control" rows="2" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Upload</button>
+      <p class="help-block">{{error}}</p>
+    </form>
+  </div>
+  <script>
+    document.getElementById('uploadButton').focus();
+  </script>
+</body>
+</html>
