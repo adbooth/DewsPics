@@ -1,4 +1,4 @@
-/* static/css/login.css */
+/* static/css/form.css */
 
 html {
   position: relative;
@@ -9,7 +9,6 @@ body {
   background-color: WhiteSmoke;
   padding-top: 150px;
   margin-bottom: 50px;
-  font-family: "Roboto Condensed", sans-serif;
 }
 
 .container {
