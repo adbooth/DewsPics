@@ -2,5 +2,4 @@
 .DS_Store
 venv
 .env
-image_index.json
-img/
+img/*
