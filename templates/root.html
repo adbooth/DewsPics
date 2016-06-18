@@ -8,26 +8,44 @@
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto+Condensed"/>
   <link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='css/root.css')}}"/>
 
+  <!-- JS -->
+  <script src="https://code.jquery.com/jquery-3.0.0.min.js" integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0=" crossorigin="anonymous" defer></script>
+
+  <!-- Page stuff -->
   <title>Dewey's Favorites</title>
-  <link rel="icon" href="{{url_for('.static', filename='res/favicon.png')}}"/>
+  <link rel="icon" href="{{url_for('.static', filename='img/favicon.png')}}"/>
 </head>
 <body>
-  <div class="container">
-    <div class="navbar">
-      <h1><a href="/upload">Dewey</a>'s Favorites</h1>
+  <div class="navbar">
+    <div class="title">
+      <h1><strong><a href="/upload">Dewey</a>'s Favorites</strong></h1>
     </div>
   </div>
   <div class="container">
   {% for image in index %}
     <div class="image">
-      <br><br><br><br><br>
-      <a href="#{{image.filename}}"><h2>{{image.title}}</h2></a>
-      <a href="/photo/{{image.filename}}">
-        <img src="{{url_for('.static', filename='img/' + image.filename)}}" alt="image.title"/>
-      </a>
+      <br><br><br><br>
+      <a href="#{{image.filename}}" name="{{image.filename}}" class="anchor"><h3>{{image.title}}</h3></a>
+      <img src="{{url_for('.static', filename='img/' + image.filename)}}" alt="image.title" onclick="toggleShow(this)"/>
+      <br><br>
       <p>{{image.blurb}}</p>
+      <br><br><br>
     </div>
   {% endfor %}
   </div>
+  <script>
+    lightBoxOn = false;
+    function toggleShow(image){
+      if(lightBoxOn){
+        $('*').css('visibility', 'visible');
+        $(document.body).css('background-color', 'White');
+      }else{
+        $('*').css('visibility', 'hidden');
+        $(image).css('visibility', 'visible');
+        $(document.body).css('background-color', 'Black');
+      }
+      lightBoxOn = !lightBoxOn;
+    }
+  </script>
 </body>
 </html>

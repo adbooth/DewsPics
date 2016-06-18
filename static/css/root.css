@@ -1,22 +1,36 @@
+/* static/css/root.css */
 
 body {
-  background-color: Snow;
-  /*font-family: "Roboto Condensed", sans-serif;*/
+  background-color: White;
   font-family: 'Lucida Console', Monaco, monospace;
 }
 
 .container {
-  max-width: 500px;
+  max-width: 70%;
 }
 
 .navbar {
   position: fixed;
-  background-color: Snow;
+  background-color: White;
   width: 100%;
   max-width: 100%;
+  box-shadow: 0 1px 3px gray;
+  border-radius: 0;
+}
+
+.title {
+  padding-left: 17%;
+  margin-top: -5px;
+}
+
+.anchor {
+  color: inherit;
+  text-decoration: none;
 }
 
 .image img {
   width: 100%;
   max-width: 100%;
+  box-shadow: 0 0 8px gray;
+  cursor: pointer;
 }
