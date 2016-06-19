@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <!-- Meta -->
-  <meta charset="UTF-8">
+  <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
 
@@ -11,7 +11,7 @@
   <link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='css/form.css')}}"/>
 
   <!-- Page stuff -->
-  <title>DewFavs - Upload</title>
+  <title>DewsPics - Upload</title>
   <link rel="icon" href="http://downloadicons.net/sites/default/files/capital-letter-d-icon-61232.png"/>
 </head>
 <body>
@@ -19,15 +19,15 @@
     <h1>Upload a photo</h1>
     <form method="post" enctype="multipart/form-data">
       <div class="form-group">
-        <label for="file" id="uploadButton">1. Select your image</label>
+        <label for="file" id="uploadButton">1. Pick your pic</label>
         <input type="file" name="file" id="file" required/>
       </div>
       <div class="form-group">
-        <label for="title">2. Title your image</label>
+        <label for="title">2. Title your pic</label>
         <input type="text" name="title" id="title" class="form-control" placeholder='Pick a nice title. How about "My Lovely Son Andrew"?' required/>
       </div>
       <div class="form-group">
-        <label for="blurb">3. Write some info about your image</label>
+        <label for="blurb">3. Write a blurb about your pic</label>
         <textarea name="blurb" id="blurb" class="form-control" rows="2" required></textarea>
       </div>
       <button type="submit" class="btn btn-primary">Upload</button>
