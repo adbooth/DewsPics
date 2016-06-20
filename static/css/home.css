@@ -5,26 +5,39 @@ body {
   font-family: 'Lucida Console', Monaco, monospace;
 }
 
-.container {
-  max-width: 70%;
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
-.navbar {
+.sidebar {
   position: fixed;
-  background-color: White;
-  width: 100%;
-  max-width: 100%;
-  border-radius: 0;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 25%;
+  padding: 2% 2%;
 }
 
-.title {
-  padding-left: 17%;
-  margin-top: -5px;
+.content {
+  overflow: auto;
+  position: absolute;
+  left: 25%;
+  top: 0;
+  height: 100%;
+  width: 75%;
+  padding: 2% 3%;
 }
 
 .anchor {
   color: inherit;
   text-decoration: none;
+  top: -25px;
+}
+
+a:focus {
+  outline: none;
 }
 
 .image img {

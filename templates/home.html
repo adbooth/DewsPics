@@ -17,22 +17,24 @@
   <link rel="icon" href="http://downloadicons.net/sites/default/files/capital-letter-d-icon-61232.png"/>
 </head>
 <body>
-  <div class="navbar">
-    <div class="title">
-      <h1><strong><a href="/upload">Dew</a>'s Pics</strong></h1>
-    </div>
+  <div class="sidebar">
+    <h1><strong><a href="/upload">Dew</a>'s Pics</strong></h1>
+    {% for image in index -%}
+      <p><a href="#{{image.filename}}">{{image.title}}</a></p>
+    {% endfor -%}
   </div>
-  <div class="container">
-  {% for image in index -%}
-    <div class="image">
-      <br><br><br><br>
-      <h3><a href="#{{image.filename}}" name="{{image.filename}}" class="anchor">{{image.title}}</a></h3>
-      <img src="{{url_for('.static', filename='img/' + image.filename)}}" alt="image.title" onclick="toggleShow(this)"/>
-      <br><br>
-      <p>{{image.blurb}}</p>
-      <br><br><br>
+  <div class="content">
+    <div class="images">
+    {% for image in index -%}
+      <div class="image">
+        <h3><a href="#{{image.filename}}" name="{{image.filename}}" class="anchor">{{image.title}}</a></h3>
+        <img src="{{url_for('.static', filename='img/' + image.filename)}}" alt="image.title" onclick="toggleShow(this)"/>
+        <br><br>
+        <p>{{image.blurb}}</p>
+        <br><br><br><br><br>
+      </div>
+    {% endfor -%}
     </div>
-  {% endfor -%}
   </div>
   <script>
     lightBoxOn = false;
