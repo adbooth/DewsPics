@@ -19,6 +19,7 @@
 <body>
   <div class="sidebar">
     <h1><strong><a href="/upload">Dew</a>'s Pics</strong></h1>
+    <br>
     {% for image in index -%}
       <p><a href="#{{image.filename}}">{{image.title}}</a></p>
     {% endfor -%}
