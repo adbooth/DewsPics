@@ -16,23 +16,30 @@
 </head>
 <body>
   <div class="container">
-    <h1>Upload a photo</h1>
-    <form method="post" enctype="multipart/form-data">
-      <div class="form-group">
-        <label for="file" id="uploadButton">1. Pick your pic</label>
-        <input type="file" name="file" id="file" required/>
+    <div class="row">
+      <div class="col-sm-6">
+        <h1>Upload a photo</h1>
+        <form method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="file" id="uploadButton">1. Pick your pic</label>
+            <input type="file" name="file" id="file" required/>
+          </div>
+          <div class="form-group">
+            <label for="title">2. Title your pic</label>
+            <input type="text" name="title" id="title" class="form-control" placeholder='Pick a nice title. How about "My Lovely Son Andrew"?' required/>
+          </div>
+          <div class="form-group">
+            <label for="blurb">3. Write a blurb about your pic</label>
+            <textarea name="blurb" id="blurb" class="form-control" rows="2" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Upload</button>
+          <p class="help-block">{{error}}</p>
+        </form>
       </div>
-      <div class="form-group">
-        <label for="title">2. Title your pic</label>
-        <input type="text" name="title" id="title" class="form-control" placeholder='Pick a nice title. How about "My Lovely Son Andrew"?' required/>
+      <div class="col-sm-6">
+        
       </div>
-      <div class="form-group">
-        <label for="blurb">3. Write a blurb about your pic</label>
-        <textarea name="blurb" id="blurb" class="form-control" rows="2" required></textarea>
-      </div>
-      <button type="submit" class="btn btn-primary">Upload</button>
-      <p class="help-block">{{error}}</p>
-    </form>
+    </div>
   </div>
   <script>
     document.getElementById('uploadButton').focus();

@@ -12,14 +12,22 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
+def get_index():
+    with open(app.config['INDEX_FILE'], 'r') as indexFile:
+        index = json.load(indexFile)
+    # index.sort(key=lambda d: d['timestamp'], reverse=True)
+    return sorted(index, key=d: d['timestamp'], reverse=True)
+
 # Set up routes
 @app.route('/')
 def home():
     """ Build page with image data file sorted by timestamp """
-    with open(app.config['INDEX_FILE'], 'r') as indexFile:
-        index = json.load(indexFile)
-    index.sort(key=lambda d: d['timestamp'], reverse=True)
-    return render_template('home.html', index=index)
+    # with open(app.config['INDEX_FILE'], 'r') as indexFile:
+    #     index = json.load(indexFile)
+    # index.sort(key=lambda d: d['timestamp'], reverse=True)
+    # return render_template('home.html', index=index)
+    return render_template('home.html', index=get_index())
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -37,6 +45,9 @@ def login():
 
     return render_template('login.html', error=error)
 
+@app.route('/manage')
+def manage():
+    pass
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -77,3 +88,6 @@ def upload():
             return redirect('/')
 
     return render_template('upload.html', error=error)
+
+@app.route('/edit/<filename>')
+def edit(filename):
