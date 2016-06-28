@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+  <link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='css/manage.css')}}"/>
+
+  <!-- Page stuff -->
+  <title>DewsPics - Edit</title>
+  <link rel="icon" href="http://downloadicons.net/sites/default/files/capital-letter-d-icon-61232.png"/>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <img src="{{url_for('.static', filename='img/' + imageInfo.filename)}}" class="img-responsive"/>
+      </div>
+      <div class="col-sm-6">
+        <h2>Change pic</h2>
+        <form method="post" enctype="multipart/form-data">
+
+          <div class="form-group">
+            <label for="image" id="uploadButton">Change image file</label>
+            <input type="file" name="image" id="image"/>
+          </div>
+
+          <div class="form-group">
+            <label for="title">Edit title</label>
+            <input type="text" name="title" id="title" class="form-control" value="{{imageInfo.title}}" placeholder='Pick a nice title. How about "My Lovely Son Andrew"?' required/>
+          </div>
+
+          <div class="form-group">
+            <label for="blurb">Edit blurb</label>
+            <textarea name="blurb" id="blurb" class="form-control" rows="2">{{imageInfo.blurb}}</textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Change</button>
+          <p class="help-block">{{error}}</p>
+
+        </form>
+        <br>
+        <h2>Delete pic</h2>
+        <form action="/delete/{{imageInfo.filename}}" method="post">
+          <button type="submit" class="btn btn-danger" onmouseover="dangerZone()">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    neverMousedOver = true;
+    function dangerZone(){
+      if(neverMousedOver){
+        alert('Danger Zone!');
+        neverMousedOver = false;
+      }
+    }
+    document.getElementById('uploadButton').focus();
+  </script>
+</body>
+</html>

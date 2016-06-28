@@ -18,20 +18,23 @@
 </head>
 <body>
   <div class="sidebar">
-    <h1><strong><a href="/upload">Dew</a>'s Pics</strong></h1>
+    <h1><strong>Dew's Pics</strong></h1>
     <br>
-    {% for image in index -%}
-      <p><a href="#{{image.filename}}">{{image.title}}</a></p>
+    {% for imageEntry in index -%}
+      <p><a href="#{{imageEntry.filename}}">{{imageEntry.title}}</a></p>
     {% endfor -%}
+    <div class="login">
+      <p><a href="/manage" class="btn btn-info">Manage</a></p>
+    </div>
   </div>
   <div class="content">
     <div class="images">
-    {% for image in index -%}
+    {% for imageEntry in index -%}
       <div class="image">
-        <h3><a href="#{{image.filename}}" name="{{image.filename}}" class="anchor">{{image.title}}</a></h3>
-        <img src="{{url_for('.static', filename='img/' + image.filename)}}" alt="image.title" onclick="toggleShow(this)"/>
+        <h4><a href="#{{imageEntry.filename}}" name="{{imageEntry.filename}}" class="anchor">{{imageEntry.title}}</a></h4>
+        <img src="{{url_for('.static', filename='img/' + imageEntry.filename)}}" alt="{{imageEntry.title}}" onclick="toggleShow(this)"/>
         <br><br>
-        <p>{{image.blurb}}</p>
+        <p>{{imageEntry.blurb}}</p>
         <br><br><br><br><br>
       </div>
     {% endfor -%}

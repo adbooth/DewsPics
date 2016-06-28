@@ -1,0 +1,16 @@
+/* static/css/form.css */
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  background-color: WhiteSmoke;
+  padding-top: 150px;
+  margin-bottom: 50px;
+}
+
+.container {
+  max-width: 850px;
+}
