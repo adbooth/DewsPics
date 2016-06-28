@@ -139,9 +139,10 @@ def edit(filename):
         'blurb': oldImageFile.blurb
     }, error=error)
 
-@app.route('/delete', methods=['POST'])
-def delete():
-    print request
+@app.route('/delete/<filename>', methods=['POST'])
+def delete(filename):
+    """ Endpoint for deleting a photo """
+    # Check for login
     if 'loggedIn' not in session or not session['loggedIn']:
         return redirect('/login')
 
