@@ -1,9 +1,9 @@
 """ app.py
 """
+import os
 import json
 from calendar import timegm
 from time import gmtime
-from os import path, remove
 
 from flask import Flask, render_template, request, redirect, session
 from flask_pymongo import PyMongo, GridFS
@@ -14,9 +14,11 @@ app.config.from_pyfile('config.py')
 mongo = PyMongo(app)
 
 def populate(fs):
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.config['UPLOAD_FOLDER'])
     for imageFile in fs.find():
         filename = imageFile.filename
-        filepath = path.join(app.config['UPLOAD_FOLDER'], filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         open(filepath, 'w').write(imageFile.read())
 
 def getIndex(fs):
@@ -107,7 +109,7 @@ def edit(filename):
     if request.method == 'POST':
         if request.files['image'].filename == '':
             # Using old image file
-            imageFile = open(path.join(app.config['UPLOAD_FOLDER'], filename))
+            imageFile = open(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         else:
             # Using newly uploaded image file
             imageFile = request.files['image']
@@ -119,7 +121,7 @@ def edit(filename):
                 error = 'Bad image filename'
 
             # Delete old local file
-            remove(path.join(app.config['UPLOAD_FOLDER'], oldImageFile.filename))
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], oldImageFile.filename))
 
         # Store image on database with info
         if not error:
@@ -148,5 +150,5 @@ def delete(filename):
 
     fs = GridFS(mongo.db)
     fs.delete(fs.find_one({'filename': filename})._id)
-    remove(path.join(app.config['UPLOAD_FOLDER'], filename))
+    os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     return redirect('/')
