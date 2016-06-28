@@ -8,10 +8,10 @@
 
   <!-- CSS -->
   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
-  <link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='css/form.css')}}"/>
+  <link rel="stylesheet" type="text/css" href="{{url_for('.static', filename='css/manage.css')}}"/>
 
   <!-- Page stuff -->
-  <title>DewsPics - Upload</title>
+  <title>DewsPics - Manage</title>
   <link rel="icon" href="http://downloadicons.net/sites/default/files/capital-letter-d-icon-61232.png"/>
 </head>
 <body>
@@ -20,24 +20,34 @@
       <div class="col-sm-6">
         <h1>Upload a photo</h1>
         <form method="post" enctype="multipart/form-data">
+
           <div class="form-group">
-            <label for="file" id="uploadButton">1. Pick your pic</label>
-            <input type="file" name="file" id="file" required/>
+            <label for="image" id="uploadButton">Pick your pic</label>
+            <input type="file" name="image" id="image" required/>
           </div>
+
           <div class="form-group">
-            <label for="title">2. Title your pic</label>
+            <label for="title">Title your pic</label>
             <input type="text" name="title" id="title" class="form-control" placeholder='Pick a nice title. How about "My Lovely Son Andrew"?' required/>
           </div>
+
           <div class="form-group">
-            <label for="blurb">3. Write a blurb about your pic</label>
-            <textarea name="blurb" id="blurb" class="form-control" rows="2" required></textarea>
+            <label for="blurb">Write a blurb about your pic (if you want)</label>
+            <textarea name="blurb" id="blurb" class="form-control" rows="2"></textarea>
           </div>
+
           <button type="submit" class="btn btn-primary">Upload</button>
           <p class="help-block">{{error}}</p>
+
         </form>
       </div>
       <div class="col-sm-6">
-        
+        <div class="container">
+          <h1>Edit photos</h1>
+          {% for imageEntry in index -%}
+            <p><a href="{{'/edit/' + imageEntry.filename}}">{{imageEntry.title}}</a></p>
+          {% endfor -%}
+        </div>
       </div>
     </div>
   </div>

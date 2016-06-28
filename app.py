@@ -3,41 +3,49 @@
 import json
 from calendar import timegm
 from time import gmtime
-from os import path
+from os import path, remove
 
 from flask import Flask, render_template, request, redirect, session
+from flask_pymongo import PyMongo, GridFS
 from werkzeug.utils import secure_filename
 
-# Set up app
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
+mongo = PyMongo(app)
 
-def get_index():
-    with open(app.config['INDEX_FILE'], 'r') as indexFile:
-        index = json.load(indexFile)
-    # index.sort(key=lambda d: d['timestamp'], reverse=True)
-    return sorted(index, key=d: d['timestamp'], reverse=True)
+def populate(fs):
+    for imageFile in fs.find():
+        filename = imageFile.filename
+        filepath = path.join(app.config['UPLOAD_FOLDER'], filename)
+        open(filepath, 'w').write(imageFile.read())
 
-# Set up routes
+def getIndex(fs):
+    index = []
+    for imageFile in fs.find():
+        index.append({
+            'timestamp': imageFile.timestamp,
+            'filename': imageFile.filename,
+            'title': imageFile.title,
+            'blurb': imageFile.blurb
+        })
+    return sorted(index, key=lambda d: d['timestamp'], reverse=True)
+
 @app.route('/')
 def home():
-    """ Build page with image data file sorted by timestamp """
-    # with open(app.config['INDEX_FILE'], 'r') as indexFile:
-    #     index = json.load(indexFile)
-    # index.sort(key=lambda d: d['timestamp'], reverse=True)
-    # return render_template('home.html', index=index)
-    return render_template('home.html', index=get_index())
-
+    """ Renders the photo stream. """
+    fs = GridFS(mongo.db)
+    populate(fs)
+    return render_template('home.html', index=getIndex(fs))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """ Show login and check password against password environment var """
     error = ''
+    """ Renders and validates login. """
     if request.method == 'POST':
         if request.form['password'] == app.config['PASSWORD']:
             # Correct password, set session var and redirect
             session['loggedIn'] = True
-            return redirect('/upload')
+            return redirect('/manage')
         else:
             # Incorrect pasword, ask to try again
             session['loggedIn'] = False
@@ -45,49 +53,99 @@ def login():
 
     return render_template('login.html', error=error)
 
-@app.route('/manage')
+@app.route('/manage', methods=['GET', 'POST'])
 def manage():
-    pass
-
-@app.route('/upload', methods=['GET', 'POST'])
-def upload():
-    """ Send upload page if logged in """
-
+    """ Renders upload and edit page. Requires login. """
+    # Check for login
     if 'loggedIn' not in session or not session['loggedIn']:
-        # Not logged in, send to login page
         return redirect('/login')
 
+    # Setup
     error = ''
+    fs = GridFS(mongo.db)
+    populate(fs)
+
+    # Check for POST
     if request.method == 'POST':
-        image = request.files['file']
-        filename = image.filename
+        # Get image file
+        imageFile = request.files['image']
+        filename = secure_filename(imageFile.filename)
 
         # Make sure file exists and is of the right type
+        filetype = filename.split('.')[-1].lower()
         if filename == '':
             error = 'No file selected'
-        elif not ('.' in filename and filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']):
+        elif not ('.' in filename and filetype in app.config['ALLOWED_EXTENSIONS']):
             error = 'Bad image filename'
 
-        if not error and image:
-            # Save file
-            filename = secure_filename(filename)
-            image.save(path.join(app.config['UPLOAD_FOLDER'], filename))
-            # Add file to index
-            with open(app.config['INDEX_FILE'], 'r+') as indexFile:
-                index = json.load(indexFile)
-                index.append({
-                    'timestamp': timegm(gmtime()),
-                    'filename': filename,
-                    'title': request.form['title'],
-                    'blurb': request.form['blurb']
-                })
-                indexFile.seek(0)
-                indexFile.truncate()
-                json.dump(index, indexFile)
-            # Redirect to home page
+        # Put image in db
+        if not error:
+            form = request.form
+            fs.put(imageFile,
+                timestamp=timegm(gmtime()),
+                filename=filename,
+                title=form['title'],
+                blurb=form['blurb'])
             return redirect('/')
 
-    return render_template('upload.html', error=error)
+    return render_template('manage.html', index=getIndex(fs), error=error)
 
-@app.route('/edit/<filename>')
+@app.route('/edit/<filename>', methods=['GET', 'POST'])
 def edit(filename):
+    """ Renders and handles photo edit page """
+    # Check for login
+    if 'loggedIn' not in session or not session['loggedIn']:
+        return redirect('/login')
+
+    # Setup
+    error = ''
+    fs = GridFS(mongo.db)
+    populate(fs)
+    oldImageFile = fs.find_one({'filename': filename})
+
+    # Check for POST
+    if request.method == 'POST':
+        if request.files['image'].filename == '':
+            # Using old image file
+            imageFile = open(path.join(app.config['UPLOAD_FOLDER'], filename))
+        else:
+            # Using newly uploaded image file
+            imageFile = request.files['image']
+            filename = secure_filename(imageFile.filename)
+
+            # Make sure file exists and is of the right type
+            filetype = filename.split('.')[-1].lower()
+            if not ('.' in filename and filetype in app.config['ALLOWED_EXTENSIONS']):
+                error = 'Bad image filename'
+
+            # Delete old local file
+            remove(path.join(app.config['UPLOAD_FOLDER'], oldImageFile.filename))
+
+        # Store image on database with info
+        if not error:
+            form = request.form
+            fs.put(imageFile,
+                timestamp=oldImageFile.timestamp,
+                filename=filename,
+                title=form['title'],
+                blurb=form['blurb'])
+            # Find old image file and delete it
+            fs.delete(oldImageFile._id)
+            return redirect('/#%s' % filename)
+
+    return render_template('edit.html', imageInfo={
+        'filename': oldImageFile.filename,
+        'title': oldImageFile.title,
+        'blurb': oldImageFile.blurb
+    }, error=error)
+
+@app.route('/delete', methods=['POST'])
+def delete():
+    print request
+    if 'loggedIn' not in session or not session['loggedIn']:
+        return redirect('/login')
+
+    fs = GridFS(mongo.db)
+    fs.delete(fs.find_one({'filename': filename})._id)
+    remove(path.join(app.config['UPLOAD_FOLDER'], filename))
+    return redirect('/')
