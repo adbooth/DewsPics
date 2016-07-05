@@ -12,5 +12,5 @@ if 'SECRET_KEY' not in environ:
 
 # Constants
 UPLOAD_FOLDER = 'static/img'
-ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff', 'svg']
+ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff', 'svg', 'nef']
 INDEX_FILE = 'image_index.json'
